@@ -1,0 +1,16 @@
+.dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.grey-dot {
+  opacity: 0.8;
+  background-color: rgb(65, 65, 65);
+}
+
+.green-dot {
+  opacity: 0.8;
+  background-color: green;
+}

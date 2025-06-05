@@ -1,0 +1,32 @@
+[
+  {
+    "type": "function",
+    "function": {
+      "name": "get_current_time",
+      "description": "获取当前时间，支持指定时区",
+      "input_schema": {
+        "properties": {
+          "timezone": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Timezone"
+          },
+          "format": {
+            "default": "ISO",
+            "title": "Format",
+            "type": "string"
+          }
+        },
+        "title": "get_current_timeArguments",
+        "type": "object"
+      }
+    }
+  }
+]
