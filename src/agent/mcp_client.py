@@ -94,12 +94,12 @@ class MCPClient:
 async def main():
     async with MCPClient('http://127.0.0.1:8000/sse', 'sse') as client:
         print(client.is_connected)
-        print(await client.get_available_tools())
+        print(client.get_available_tools())
         # print(await client.call_tool('get_current_time', ''))
 
     async with MCPClient('http://127.0.0.1:8085/mcp', 'streamable-http') as client:
         print(client.is_connected)
-        print(await client.get_available_tools())
+        print(client.get_available_tools())
 
 
 if __name__ == '__main__':

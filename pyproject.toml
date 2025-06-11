@@ -1,5 +1,5 @@
 [project]
-name = "streamlit-learning"
+name = "streamlit-agent"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
@@ -8,4 +8,5 @@ dependencies = [
     "mcp[cli]>=1.9.3",
     "openai>=1.84.0",
     "streamlit>=1.45.1",
+    "streamlit-echarts>=0.4.0",
 ]

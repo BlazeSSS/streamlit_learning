@@ -68,8 +68,8 @@ if __name__ == "__main__":
                 if tool_call.function.arguments:
                     tool_call_final['function']['arguments'] += tool_call.function.arguments
         print(tool_call_final)
-            # print(chunk.choices[0].delta)
-            # print(chunk.choices[0].delta.content)
+        # print(chunk.choices[0].delta)
+        # print(chunk.choices[0].delta.content)
     else:
         if res.choices[0].finish_reason == 'tool_calls':
             print(f'function name: {res.choices[0].message.tool_calls[0].function.name}')

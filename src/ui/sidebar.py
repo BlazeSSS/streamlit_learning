@@ -1,3 +1,5 @@
+import os
+
 import streamlit as st
 
 from src.util import interact_utils
@@ -5,24 +7,17 @@ from src.util import interact_utils
 
 async def create_sidebar():
     st.title("MCP 工具")
-    # st.radio(
-    #     "Transport",
-    #     ["stdio", "sse", "streamable-http"],
-    #     index=1,
-    #     disabled=True,
-    #     horizontal=True,
-    # )
+    # 模型选择
+    model_name_list = os.environ.get('model_name_list')
+    model_list = model_name_list.split(',')
+    st.selectbox('Model Name', model_list, index=0, disable=True, key="model_name")
 
     # MCP 服务信息
-    st.selectbox(
-        "Transport",
-        ["stdio", "sse", "streamable-http"],
-        index=1,
-        disabled=True,
-        key="mcp_transport",
-    )
-    st.text_input("MCP Server URL", "http://127.0.0.1:8000/sse", key="mcp_url")
+    st.selectbox("Transport", ["stdio", "sse", "streamable-http"],
+                 index=2, disabled=True, key="mcp_transport")
+    st.text_input("MCP Server URL", "http://127.0.0.1:8080/mcp", key="mcp_url")
 
+    # 初始化
     agent = interact_utils.get_agent()
 
     # MCP 服务连接按钮

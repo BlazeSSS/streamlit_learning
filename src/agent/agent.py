@@ -4,6 +4,7 @@ from itertools import chain
 
 from src.agent.llm_service import LLMService
 from src.agent.mcp_client import MCPClient
+from src.util import interact_utils
 
 
 class Agent:
@@ -28,24 +29,29 @@ class Agent:
 
     def process_query(self, query):
         # 初始化模型
-        model_name = os.environ.get('model_name')
-
+        model_name = interact_utils.get_session_value('model_name')
+        if not model_name:
+            model_name = os.environ.get('model_name')
         base_url = os.environ.get('base_url')
         api_key = os.environ.get('api_key')
         llm_service = LLMService(base_url, api_key)
 
+        if self.tools:
+            print('chat with tools:\n', self.tools)
         res_stream = llm_service.chat(model_name, self._user_msg(query), self.tools)
 
         # TODO
         if model_name.startswith('deepseek-ai'):
             return self._deepseek_stream(res_stream)
+        elif model_name.startswith('Qwen'):
+            return self._qwen_stream(res_stream)
         return False, res_stream
 
     async def call_tool(self, tool_name, tool_input):
         if self.mcp_server_url and not self.mcp_transport:
             async with MCPClient(self.mcp_server_url, self.mcp_transport) as client:
                 if client.is_connected:
-                    return client.call_tool(tool_name, tool_input)
+                    return await client.call_tool(tool_name, tool_input)
         else:
             print('\n Mcp Server info required.')
         return None
@@ -88,11 +94,23 @@ class Agent:
                     tool_call_final['function']['arguments'] += tool_call.function.arguments
 
         if not is_use_tool:
-            return is_use_tool, Agent._concat_stream(first_content, res_stream)
+            return is_use_tool, chain(first_content, res_stream)
             # return is_use_tool, res_stream
         else:
             return is_use_tool, io.StringIO(
                 f'<tool_call>{{"name":"{tool_call_final['function']['name']}","arguments":"{tool_call_final['function']['arguments']}"}}</tool_call>')
+
+    @staticmethod
+    def _qwen_stream(res_stream):
+        is_use_tool = False
+        first_content = ''
+        for chunk in res_stream:
+            first_content = chunk.choices[0].delta.content
+            if first_content == '<tool_call>':
+                is_use_tool = True
+            break
+
+        return is_use_tool, chain(first_content, res_stream)
 
     @staticmethod
     def _concat_stream(first, res_stream):

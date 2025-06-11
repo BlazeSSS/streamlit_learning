@@ -1,10 +1,13 @@
 import asyncio
+
 import streamlit as st
-from src.ui import sidebar, chat_box
-from src.util import interact_utils
 from dotenv import load_dotenv
 
+from src.ui import sidebar, chat_box
+from src.util import interact_utils
+
 load_dotenv()
+
 
 async def mian():
     st.set_page_config(

@@ -10,9 +10,11 @@ def get_session_value(key):
 def set_session_value(key, value):
     st.session_state[key] = value
 
+
 def init_session_state():
     if "mcp_connect" not in st.session_state:
         st.session_state.mcp_connect = False
+
 
 @st.cache_resource
 def get_agent():
